@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise! 🎂</title>
+    <style>
+        body { 
+            margin: 0; overflow: hidden; 
+            background: linear-gradient(-45deg, #ff6b6b, #feca57, #ff9ff3, #54a0ff); 
+            background-size: 400% 400%; animation: gradient 15s ease infinite; 
+            font-family: Arial, sans-serif; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; height: 100vh; color: white; text-align: center; 
+        }
+        @keyframes gradient { 0%{background-position:0%50%}50%{background-position:100%50%}100%{background-position:0%50%} }
+        #start-screen { font-size: 2.5em; cursor: pointer; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{transform:scale(1);}50%{transform:scale(1.1);} }
+        .cake-start { font-size: 4em; display: block; margin-top: 20px; animation: wiggle 1s infinite; }
+        @keyframes wiggle { 0%,100%{transform:rotate(0deg);}25%{transform:rotate(5deg);}75%{transform:rotate(-5deg);} }
+        .hidden { display: none !important; }
+        .hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+        .heart { position: absolute; font-size: 30px; animation: floatUp 5s forwards; }
+        @keyframes floatUp { 0%{transform:translateY(100vh)scale(0);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-100px)scale(1);opacity:0;} }
+        h1 { font-size: 4em; margin: 10px; opacity: 0; animation: fadeInBig 1.5s 0.5s forwards; }
+        @keyframes fadeInBig { to{opacity:1;transform:scale(1);} }
+        .paragraph { font-size: 1.6em; max-width: 600px; margin: 30px; opacity: 0; animation: fadeIn 2s 1.5s forwards; line-height: 1.5; }
+        @keyframes fadeIn { to{opacity:1;transform:translateY(0);} }
+        #wish-section { opacity: 0; animation: slideUp 1s 3s forwards; margin-top: 40px; }
+        @keyframes slideUp { from{opacity:0;transform:translateY(50px);}to{opacity:1;transform:translateY(0);} }
+        #wish-input { font-size: 1.2em; padding: 15px; border: none; border-radius: 25px; width: 300px; text-align: center; margin-right: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        #wish-btn { font-size: 1.2em; padding: 15px 30px; background: #ff69b4; color: white; border: none; border-radius: 25px; cursor: pointer; transition: transform 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        #wish-btn:hover { transform: scale(1.05); }
+        #wish-btn:active { transform: scale(0.98); }
+        #wish-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        #reply { font-size: 1.4em; margin-top: 20px; padding: 25px; background: rgba(255,255,255,0.25); border-radius: 25px; opacity: 0; animation: popIn 1s forwards; max-width: 500px; backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        @keyframes popIn { 0%{opacity:0;transform:scale(0.5);}70%{transform:scale(1.02);}100%{opacity:1;transform:scale(1);} }
+        .timer { font-size: 0.9em; color: #ffd700; margin-top: 10px; }
+        .tease { background: linear-gradient(45deg, #ff69b4, #ff9ff3); color: #fff; border: 3px solid #ffd700 !important; animation: shake 0.5s infinite; }
+        @keyframes shake { 0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);} }
+    </style>
+</head>
+<body>
+    <div id="start-screen">
+        Click the cake below for your SURPRISE! 🎁✨<br><br>
+        <span class="cake-start" onclick="startSurprise()">🎂</span>
+    </div>
+    
+    <div id="main-content" class="hidden">
+        <div class="hearts" id="hearts"></div>
+        <h1>Happy Birthday, mumu! 🎉💖</h1>
+        <p class="paragraph">Mur xhun joni💕🫂, aji r pra aku tmi mut ski dangor hoii gola, tmk itiya apuni, madam jii buli aie mtim dia aruu dangor buli full respect dii🫡, bki aruu dintu enjoy kra tmr, aji tmr aie din💕😘 aruu birthday buli wish eta kriba👇....aruu wish tuu angrezit kba dehhh mumu😂 starting tuu "I wish for" buli kriba</p>
+        
+        <div id="wish-section">
+            <input type="text" id="wish-input" placeholder="Type your birthday wish here..." maxlength="120">
+            <button id="wish-btn" onclick="sendWish()">Make a Birthday Wish! ✨</button>
+            <div id="reply"></div>
+        </div>
+    </div>
+
+    <script>
+        let wishCount = 0; // Track wishes
+        
+        function startSurprise() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            createHearts();
+        }
+        
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = ['💖','❤️','💕','🌟','✨','😍'][Math.floor(Math.random()*6)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDelay = Math.random() * 0.5 + 's';
+                    heartsContainer.appendChild(heart);
+                    setTimeout(() => heart.remove(), 5000);
+                }, i * 50);
+            }
+        }
+        
+        function sendWish() {
+            const input = document.getElementById('wish-input');
+            const btn = document.getElementById('wish-btn');
+            const replyDiv = document.getElementById('reply');
+            
+            const wish = input.value.trim();
+            if (!wish) {
+                alert('Please type your wish first! 🥰');
+                return;
+            }
+            
+            wishCount++; // Increment wish counter
+            
+            // Disable input/button
+            input.disabled = true;
+            btn.disabled = true;
+            
+            if (wishCount === 1) {
+                // FIRST WISH - Normal sweet reply (60s)
+                btn.innerHTML = 'Wish Coming True... ✨';
+                const lowerWish = wish.toLowerCase();
+                let reply = '';
+                
+                if (lowerWish.includes('love') || lowerWish.includes('you') || lowerWish.includes('us')) {
+                    reply = `💕 "${wish}" - My heart melts hearing that! Our love will grow deeper every year. You're my forever person! 💑😘`;
+                } 
+                else if (lowerWish.includes('happy') || lowerWish.includes('happiness') || lowerWish.includes('joy')) {
+                    reply = `🌈 "${wish}" - Perfect wish! May happiness follow you everywhere, just like your smile follows me! 🥰✨`;
+                }
+                else if (lowerWish.includes('health') || lowerWish.includes('healthy') || lowerWish.includes('fit')) {
+                    reply = `💪 "${wish}" - Granted! Perfect health for all our adventures together. I'll always care for you! ❤️🏃‍♀️`;
+                }
+                else if (lowerWish.includes('travel') || lowerWish.includes('trip') || lowerWish.includes('vacation')) {
+                    reply = `✈️ "${wish}" - YES! Let's plan that dream trip. You + me + world = perfect! 🗺️💕`;
+                }
+                else if (lowerWish.includes('family') || lowerWish.includes('friends') || lowerWish.includes('mom') || lowerWish.includes('dad')) {
+                    reply = `👨‍👩‍👧‍👦 "${wish}" - Beautiful! May your family always be your strength. I'm your biggest fan! 🥰❤️`;
+                }
+                else if (lowerWish.includes('success') || lowerWish.includes('career') || lowerWish.includes('job') || lowerWish.includes('study')) {
+                    reply = `🎯 "${wish}" - Absolutely! You'll crush every goal. I'm cheering every step! 🚀💪`;
+                }
+                else {
+                    reply = `🎂 "${wish}" - Beautiful wish! It's granted 1000x! Everything good for you, double for us! 😍✨`;
+                }
+                
+                showReplyWithTimer(reply, 60000, true); // 60s timer
+            } 
+            else {
+                // SECOND+ WISHES - Playful teasing + auto-close
+                btn.innerHTML = 'Greedy much? 😜';
+                btn.classList.add('tease');
+                
+                const teaseReplies = [
+                    `😏 "${wish}" - Greedy greedy! One wish wasn't enough? You're too cute when you're wish-happy! 😂`,
+                    `🤭 "${wish}" - AGAIN?! Okay miss wish-machine, but this is your LAST one! What's with you and wishes?! 😜`,
+                    `😜 "${wish}" - Haha caught you! Wish addict alert! One more and I'm calling wish-police! 🚨😂`,
+                    `😘 "${wish}" - Aww you're killing me with cuteness! But seriously... enough wishes! Time to celebrate IRL! 🎉`,
+                    `🥰 "${wish}" - Okay okay, you're too adorable! But no more wishes - come here for real birthday hugs instead! 🤗`
+                ];
+                
+                const randomTease = teaseReplies[Math.floor(Math.random() * teaseReplies.length)];
+                showReplyWithTimer(randomTease, 60000, false, () => {
+                    // Auto-close after 60s
+                    setTimeout(() => {
+                        alert('Birthday magic complete! See you soon my love! 😘💕');
+                        window.close();
+                    }, 1000);
+                });
+            }
+        }
+        
+        function showReplyWithTimer(replyText, duration, canReset = true, onComplete = null) {
+            const replyDiv = document.getElementById('reply');
+            
+            setTimeout(() => {
+                replyDiv.innerHTML = replyText;
+                replyDiv.style.animation = 'none';
+                setTimeout(() => replyDiv.style.animation = 'popIn 1s forwards', 10);
+            }, 1000);
+            
+            // 60s Timer
+            let timeLeft = 60;
+            const timerDiv = document.createElement('div');
+            timerDiv.className = 'timer';
+            timerDiv.id = 'countdown';
+            replyDiv.appendChild(timerDiv);
+            
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDiv.innerHTML = `Closes in ${timeLeft}s... ⏳`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    if (canReset) {
+                        resetForm();
+                    }
+                    if (onComplete) onComplete();
+                }
+            }, 1000);
+        }
+        
+        function resetForm() {
+            const input = document.getElementById('wish-input');
+            const btn = document.getElementById('wish-btn');
+            const replyDiv = document.getElementById('reply');
+            
+            input.disabled = false;
+            input.value = '';
+            input.focus();
+            btn.disabled = false;
+            btn.innerHTML = 'Make Another Wish! ✨';
+            btn.classList.remove('tease');
+            replyDiv.innerHTML = '';
+            document.getElementById('countdown')?.remove();
+        }
+    </script>
+</body>
+</html>
